@@ -14,7 +14,7 @@
           <!-- <q-separator /> -->
           <q-card style="text-align: center;">
             <div class="q-pl-lg q-pr-lg">
-              <q-input v-model="form.email" type="email" placeholder="Name"
+              <q-input v-model="form.name" placeholder="Name"
                 error-message="Ingrese su correo" @keyup.enter="submit">
               </q-input>
             </div>
@@ -37,7 +37,17 @@ export default {
     }
   },
   methods: {
-    submit () {}
+    submit () {
+      if (this.form.name) {
+        this.$q.localStorage.set('name', this.form.name)
+        this.$router.push('/dashboard')
+      } else {
+        this.$q.notify({
+          type: 'warning',
+          message: 'You must enter a name'
+        })
+      }
+    }
   }
 }
 </script>

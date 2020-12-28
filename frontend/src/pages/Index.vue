@@ -1,14 +1,15 @@
 <template>
-  <q-page class="flex flex-center">
-    <img
-      alt="Quasar logo"
-      src="~assets/quasar-logo-full.svg"
-    >
+  <q-page class="flex flex-left">
+    <Issues />
   </q-page>
 </template>
 
 <script>
+import Issues from 'components/Issues'
 export default {
-  name: 'PageIndex'
+  name: 'PageIndex',
+  components: {
+    Issues
+  }
 }
 </script>
