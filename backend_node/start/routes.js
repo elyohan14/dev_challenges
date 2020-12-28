@@ -19,3 +19,18 @@ const Route = use('Route')
 Route.get('/', () => {
   return { greeting: 'Hello world in JSON' }
 })
+
+const addPrefixToGroup = group => {
+  // Routes group with /api/ prefix
+  group.prefix("api");
+  return group;
+};
+
+
+addPrefixToGroup(
+  Route.group(() => {
+    Route.post('issue/:issue/join', 'IssueController.store')
+  })
+)
+
+

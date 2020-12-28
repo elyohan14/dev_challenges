@@ -34,13 +34,13 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <q-input dense v-model="form.storyNumber" placeholder="Story number #1" autofocus />
+          <q-input dense v-model="form.issue" placeholder="Story number #1" autofocus />
            <q-input dense v-model="form.description" placeholder="Story description" @keyup.enter="prompt = false" />
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Add issue" v-close-popup />
+          <q-btn flat label="Add issue" @click="saveIssue" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -58,6 +58,13 @@ export default {
   methods: {
     openCreateIssueDialog () {
       this.prompt = true
+    },
+    saveIssue () {
+      const formData = {
+        description: this.form.description,
+        name: this.$q.localStorage.getItem('name')
+      }
+      this.$api.post(`issue/${this.form.issue}/join`, formData)
     }
   }
 }
