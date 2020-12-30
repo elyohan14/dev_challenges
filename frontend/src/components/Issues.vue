@@ -7,21 +7,11 @@
       <div class="q-pt-md">
         <q-item-label header><b>Issues</b></q-item-label>
       </div>
-      <q-item clickable v-ripple>
+      <q-item clickable v-ripple v-for="issue in issues" :key="issue.id">
         <q-item-section>
-          <q-item-label>Story number</q-item-label>
+          <q-item-label>{{ issue.id }}</q-item-label>
           <q-item-label caption>
-            Story description
-          </q-item-label>
-        </q-item-section>
-      </q-item>
-
-      <q-item clickable v-ripple>
-        <q-item-section>
-          <q-item-label>Password</q-item-label>
-          <q-item-label caption>
-            Require password for purchase or use
-            password to restrict purchase
+            {{ issue.description }}
           </q-item-label>
         </q-item-section>
       </q-item>
@@ -48,12 +38,34 @@
 </template>
 
 <script>
+import Ws from '@adonisjs/websocket-client'
+const ws = Ws('ws://localhost:8082')
 export default {
   data () {
     return {
       prompt: null,
-      form: {}
+      form: {},
+      poker: null,
+      issues: []
     }
+  },
+  created () {
+    ws.connect()
+    const poker = ws.subscribe('poker')
+    poker.on('ready', () => {
+      console.log('ready')
+    })
+
+    poker.on('error', (error) => {
+      console.log('This is the error', error)
+    })
+    poker.on('issues', (data) => {
+      console.log('This is the issues', data)
+      this.issues = data
+    })
+
+    poker.on('close', () => {
+    })
   },
   methods: {
     openCreateIssueDialog () {

@@ -8,6 +8,7 @@
  * Resourceful controller for interacting with issues
  */
 const Redis = use('Redis')
+const Ws = use('Ws')
 const issue = {
   id: 1,
   description: ''
@@ -18,6 +19,20 @@ const userIssue = {
 }
 class IssueController {
   /**
+   * Get issues from redis.
+   *
+   */
+  async getIssues () {
+    return await Redis.get('issues') ? JSON.parse(await Redis.get('issues')) : []
+  }
+  /**
+   * Get User Issues from redis.
+   *
+   */
+  async getUserIssues () {
+    return await Redis.get('userIssues') ?  JSON.parse(await Redis.get('userIssues')) : []
+  }
+  /**
    * Show a list of all issues.
    * GET issues
    *
@@ -27,6 +42,7 @@ class IssueController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
+    return await this.getIssues()
   }
 
   /**
@@ -39,17 +55,16 @@ class IssueController {
    */
   async store ({ request, params, response }) {
     const req = request.all()
-    // return params.issue
+    const userName = req.name
+    const issueNumber = params.issue
     // Check if the issue number exists
-    const issues = await Redis.get('issues') ? JSON.parse(await Redis.get('issues')) : []
-    console.log('issues', issues)
-    const exists = issues ? issues.find(val => val.id == params.issue) : false
+    const issues = await this.getIssues()
+    const exists = issues ? issues.find(val => val.id == issueNumber) : false
 
-    console.log('req', req)
     if (!exists) {
       // Create the issue
       issues.push({
-        id: params.issue,
+        id: issueNumber,
         description: req.description
       })
       await Redis.set('issues', JSON.stringify(issues))
@@ -57,16 +72,22 @@ class IssueController {
     
     // Asociate the user with issue
     // Check if user already joined to issue
-    const userIssues = await Redis.get('userIssues') ?  JSON.parse(await Redis.get('userIssues')) : []
-    const userIssuesExists = userIssues ? userIssues.find(val => val.issueId == params.issue && val.name == req.name) : false
+    const userIssues = await this.getUserIssues()
+    const userIssuesExists = userIssues ? userIssues.find(val => val.issueId == issueNumber && val.name == userName) : false
 
     if (!userIssuesExists) {
       userIssues.push({
-        issueId: params.issue,
-        name: req.name
+        issueId: issueNumber,
+        name: userName
       })      
     }
-    response.send(await Redis.get('issues'))
+
+    const topic = Ws.getChannel('poker').topic('poker')
+    // Send issues through websocket
+    if(topic){
+      topic.broadcast('issues', await this.getIssues())
+    }
+    response.send(true)
   }
 
   /**

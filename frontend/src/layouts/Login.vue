@@ -1,22 +1,15 @@
 <template>
-   <div>
+  <div>
     <div class="fullscreen column items-center justify-center bg-grey-4">
-      <transition
-        appear
-        enter-active-class="animated flipInY"
-        leave-active-class="animated fadeOutDown"
-      >
-        <q-card
-          class="bg-white login relative-position"
-          style="border-radius: 15px"
-        >
-          <!-- <q-card-section style="background-color: #F2F27F" class="column justify-center text-center text-white q-pt-xl" /> -->
-          <!-- <q-separator /> -->
+      <transition appear enter-active-class="animated flipInY" leave-active-class="animated fadeOutDown">
+        <q-card class="bg-white login relative-position" style="border-radius: 15px">
+          <q-card-section>
+            <div class="text-h6 text-grey-7">Workana Planning Poker System</div>
+            <div class="text-subtitle2 text-grey-7">Hiring challenge</div>
+          </q-card-section>
           <q-card style="text-align: center;">
             <div class="q-pl-lg q-pr-lg">
-              <q-input v-model="form.name" placeholder="Name"
-                error-message="Ingrese su correo" @keyup.enter="submit">
-              </q-input>
+              <q-input v-model="form.name" placeholder="Name" error-message="Ingrese su correo" @keyup.enter="submit" />
             </div>
           </q-card>
           <q-card-actions vertical class="q-pa-md">
@@ -30,10 +23,14 @@
 
 <script>
 export default {
-  name: 'Login',
   data () {
     return {
       form: {}
+    }
+  },
+  created () {
+    if (this.getUserName()) {
+      this.$router.push('/dashboard')
     }
   },
   methods: {
@@ -47,6 +44,9 @@ export default {
           message: 'You must enter a name'
         })
       }
+    },
+    getUserName () {
+      return this.$q.localStorage.getItem('name')
     }
   }
 }
