@@ -9,14 +9,7 @@
  */
 const Redis = use('Redis')
 const Ws = use('Ws')
-const issue = {
-  id: 1,
-  description: ''
-}
-const userIssue = {
-  issueId: 1,
-  name: 'Florencia'
-}
+
 class IssueController {
   /**
    * Get issues from redis.
@@ -25,13 +18,7 @@ class IssueController {
   async getIssues () {
     return await Redis.get('issues') ? JSON.parse(await Redis.get('issues')) : []
   }
-  /**
-   * Get User Issues from redis.
-   *
-   */
-  async getUserIssues () {
-    return await Redis.get('userIssues') ?  JSON.parse(await Redis.get('userIssues')) : []
-  }
+
   /**
    * Show a list of all issues.
    * GET issues
@@ -42,11 +29,11 @@ class IssueController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
-    return await this.getIssues()
+    response.send(await this.getIssues())
   }
 
   /**
-   * Create/save a new issue.
+   * Create/save a new issue and join an user.
    * POST issues
    *
    * @param {object} ctx
@@ -59,28 +46,36 @@ class IssueController {
     const issueNumber = params.issue
     // Check if the issue number exists
     const issues = await this.getIssues()
-    const exists = issues ? issues.find(val => val.id == issueNumber) : false
+    const exists = issues ? issues.findIndex(val => val.id == issueNumber) : false
 
-    if (!exists) {
-      // Create the issue
+    if (exists === -1) { // If not exists the issue
+      // Create the issue and join user
       issues.push({
         id: issueNumber,
-        description: req.description
+        description: req.description,
+        members: [
+          {
+            name: userName,
+            status: 'waiting'
+          }
+        ]
       })
-      await Redis.set('issues', JSON.stringify(issues))
+    } else { // If the issue exists
+      // Join the user
+      const issue = issues[exists]
+      const joined = issue.members ? issue.members.find(val => val.name == userName) : false
+      if (!joined) { // If the users is not joined
+        issue.members.push({
+          name: userName,
+          status: 'waiting'
+        })
+        issues[exists] = issue
+      }
     }
+    // Save the issues
+    await Redis.set('issues', JSON.stringify(issues))
     
-    // Asociate the user with issue
-    // Check if user already joined to issue
-    const userIssues = await this.getUserIssues()
-    const userIssuesExists = userIssues ? userIssues.find(val => val.issueId == issueNumber && val.name == userName) : false
 
-    if (!userIssuesExists) {
-      userIssues.push({
-        issueId: issueNumber,
-        name: userName
-      })      
-    }
 
     const topic = Ws.getChannel('poker').topic('poker')
     // Send issues through websocket

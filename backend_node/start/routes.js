@@ -29,6 +29,7 @@ const addPrefixToGroup = group => {
 
 addPrefixToGroup(
   Route.group(() => {
+    Route.get('issues', 'IssueController.index')
     Route.post('issue/:issue/join', 'IssueController.store')
   })
 )
