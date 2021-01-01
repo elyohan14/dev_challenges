@@ -6,9 +6,10 @@ I'm Yohan Arias and this is the [Planning Poker](https://en.wikipedia.org/wiki/P
 The app is build using NodeJS, VueJS including their respectives Frameworks (AdonisJS and Quasar).
 These frameworks let us keep a clean code using best practices.
 
-## The Planning Poker Dashboard
+## The Planning Poker System
 
-[![See demo interface](https://user-images.githubusercontent.com/281727/100144788-13509980-2e76-11eb-8ae4-264f94928225.png)](https://codepen.io/emilioastarita/pen/NWRKWwv)
+![See demo interface](./screenshots/login.png)
+![See demo interface](./screenshots/dashboard.png)
 
 ### At backend layer we have a NodeJS app:
 
@@ -24,7 +25,7 @@ The Rest API has the following endpoints:
 
 ##### `POST /issue/{:issue}/join` - Used to join `{:issue}`. 
    - If issue not exists generate a new one.
-   - Must receive a payload with the intended name. ie: `{"name": "florencia"}`
+   - Must receive a payload with the intended name. ie: `{"name": "Yurmira"}`
 
 ##### `POST /issue/{:issue}/leave` - Used to leave `{:issue}`. 
    - When the user wants leave the issue
@@ -41,9 +42,9 @@ The Rest API has the following endpoints:
         {
          "status": "voting", 
          "members": [
-              {"name": "florencia", "status": "voted"}, 
-              {"name": "kut", "status": "waiting"}, 
-              {"name": "lucho", "status": "passed"}
+              {"name": "Yurmira", "status": "voted"}, 
+              {"name": "Juan", "status": "waiting"}, 
+              {"name": "Yohan", "status": "passed"}
           ]
          }
         ````
@@ -52,9 +53,9 @@ The Rest API has the following endpoints:
             {
                 "status": "reveal", 
                 "members": [
-                    {"name": "florencia", "status": "voted", "value": 20}, 
-                    {"name": "kut", "status": "voted", "value": 20}, 
-                    {"name": "lucho", "status": "passed"}
+                    {"name": "Yurmira", "status": "voted", "value": 20}, 
+                    {"name": "Juan", "status": "voted", "value": 20}, 
+                    {"name": "Yohan", "status": "passed"}
                 ],
                "avg": 20
             }
@@ -96,5 +97,5 @@ Check if services are up and running:
 
 ## Unit testing
 
-- Run npm run test on backend_node
+- Run `npm run test` on backend_node
 
