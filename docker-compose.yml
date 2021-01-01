@@ -5,6 +5,8 @@ services:
     image: "node:12"
     volumes:
       - "./backend_node/:/home/node/app"
+    environment:
+      - HOST=0.0.0.0  # listen on all interfaces
     expose:
       - "8082"
     command: bash -c "
@@ -27,7 +29,7 @@ services:
     expose:
       - "8080"
     command: bash -c "
-      npm install -g @quasar/cli && npm install -g yarn && yarn && quasar dev
+      npm install -g @quasar/cli && yarn && quasar dev
       "
     working_dir: /home/node/app
     ports:
