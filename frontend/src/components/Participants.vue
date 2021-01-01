@@ -1,10 +1,10 @@
 <template>
   <div>
     <q-toolbar class="bg-primary text-white shadow-2">
-      <q-toolbar-title>Participants</q-toolbar-title>
+      <q-toolbar-title>Participants {{ issue.status == 'reveal' ? '- Avg ' + issue.avg : '' }}</q-toolbar-title>
     </q-toolbar>
     <q-list bordered>
-      <q-item v-for="contact in issue.members" :key="contact.id" class="q-mb-sm" clickable v-ripple>
+      <q-item v-for="contact in issue.members" :key="contact.id" class="q-mb-sm" v-ripple>
         <q-item-section avatar>
           <q-avatar>
             <img :src="`https://cdn.quasar.dev/img/avatar${randomNumber()}.jpg`">
@@ -13,7 +13,7 @@
 
         <q-item-section>
           <q-item-label>{{ contact.name }}</q-item-label>
-          <q-item-label caption lines="1">Voto</q-item-label>
+          <q-item-label caption lines="1">{{ contact.value }}</q-item-label>
         </q-item-section>
 
         <q-item-section side>

@@ -66,6 +66,7 @@ export default {
     },
     selectIssue (value) {
       this.issueid = value.id
+      this.$api.get(`issue/${this.issueid}`).then(res => {})
     }
   }
 }

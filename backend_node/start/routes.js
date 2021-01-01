@@ -5,11 +5,8 @@
 | Routes
 |--------------------------------------------------------------------------
 |
-| Http routes are entry points to your web application. You can create
-| routes for different URLs and bind Controller actions to them.
+| This file contains the url routes and binding to controller actions.
 |
-| A complete guide on routing is available here.
-| http://adonisjs.com/docs/4.1/routing
 |
 */
 
@@ -30,7 +27,10 @@ const addPrefixToGroup = group => {
 addPrefixToGroup(
   Route.group(() => {
     Route.get('issues', 'IssueController.index')
+    Route.get('issue/:issue', 'IssueController.show')
     Route.post('issue/:issue/join', 'IssueController.store')
+    Route.post('issue/:issue/vote', 'IssueController.vote')
+    Route.post('issue/:issue/leave', 'IssueController.leave')
   })
 )
 

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { Notify } from 'quasar'
 
 const axiosInstance = axios.create({
   baseURL: 'http://127.0.0.1:8082/api/'
@@ -10,7 +11,11 @@ export default async ({ store, Vue, router }) => {
     return response.data
   }, function (error) {
     // Error
-    console.log('Error', error)
+    console.log('Error', error.response)
+    Notify.create({
+      type: 'negative',
+      message: error.response.data
+    })
   })
 
   axiosInstance.interceptors.request.use(async function (config) {

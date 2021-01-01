@@ -2,36 +2,29 @@
 
 Hi!
 
-We are looking for great PHP and Javascript developers to join our team. 
-Instead of going through a ~~boring~~ long interview process, we decided that code often speaks for itself. 
-If you're up to the challenge, please take a couple of hours to play with this challenge and submit your solution.
+I'm Yohan Arias and this is the [Planning Poker](https://en.wikipedia.org/wiki/Planning_poker) System, a project in response to challenge from Workana.
+The app is build using NodeJS, VueJS including their respectives Frameworks (AdonisJS and Quasar).
+These frameworks let us keep a clean code using best practices.
 
-## The Planning Poker Lobby
+## The Planning Poker Dashboard
 
 [![See demo interface](https://user-images.githubusercontent.com/281727/100144788-13509980-2e76-11eb-8ae4-264f94928225.png)](https://codepen.io/emilioastarita/pen/NWRKWwv)
 
-This time let's build a little [planning poker](https://en.wikipedia.org/wiki/Planning_poker) system. The exercise 
-will work in multiple levels (while you're 
-not supposed to work on all of them we hope that you can handle at least one with a good level of expertise).
+### At backend layer we have a NodeJS app:
 
-### At backend layer you can choose among three options:
-
-- **Mocked Service** mock your responses in the client side using async functions (use this option if you are front developer)
-- **Node Js Backend** Here you can use express, implement your own server or any framework of your preference. If you go with this option 
-we expect to see more realtime features.
-- **PHP Server**  If you go with PHP please pick a light framework. We expect to see more enterprise level software with robust error handling at API level. 
-Bonus if you use PHP 8 features.
+- The app has a structure very similar to Laravel (MVC), in this case just Model - Controller.
 
 
-### Backend endpoints to implement
+### Backend endpoints implemented
 
-Let's build a REST API with the following endpoints. Feel free to change some things these 
-descriptions are only for guidance. 
+The Rest API has the following endpoints:
+
+##### `GET /issues` - Used to show issues. 
+   - Show all of issues availables.
 
 ##### `POST /issue/{:issue}/join` - Used to join `{:issue}`. 
    - If issue not exists generate a new one.
    - Must receive a payload with the intended name. ie: `{"name": "florencia"}`
-   - Feel free to use a session or token to keep identified the user in subsequent requests.
  
 ##### `POST /issue/{:issue}/vote` - Used to vote `{:issue}`. Must receive a payload with the vote value.
    - Reject votes when status of `{:issue}` is not `voting`. 
@@ -39,7 +32,7 @@ descriptions are only for guidance.
    - Reject votes if user already `voted` or `passed`. 
   
 ##### `GET /issue/{:issue}` - Returns the status of issue
-   Because during `voting` status the votes are secret you must hide each vote until all members voted.
+   During `voting` status the votes are secret.
    - Issue is `voting`: 
         ````json
         {
@@ -66,32 +59,19 @@ descriptions are only for guidance.
 
 #### Realtime 
 
-If you are implementing backend with node could be nice to have a collection of events notifying clients about new votes
-and changes using some kind of realtime technology of your choice as websockets or long-polling. 
+The app updates the issues, voting and participants info in realtime.
 
 #### Persistence
 
-For persistence use the `redis` service provided in docker-compose and choose the best combination of operation/data structures
-that serves  for your solution.
-
-If you don't want to mess too much with the backend, and you are in the node path you can use `in memmory` persistence but please
-provide some kind of abstraction around your store. 
-
-
-**Bonus points** if you can provide some hints around horizontal scalability of the backend service using `redis` features.     
+Redis is used to store the data.
 
 
 ### Frontend
 
-Provide an interface to use the system. 
-
-
-If you are backend developer and don't want to build a front give us a bunch of `curl`s showing how to query
-the status and how to do some votes.
+The frontend is developed using Vue 2.
 
 If you want to work on frontend use Vue 2 or Vue 3 to construct an interface:
 
- - Take a look at [our Codepen](https://codepen.io/emilioastarita/pen/NWRKWwv) if you are looking for some inspiration or ideas.
  - Create or join an issue by number
  - Show board with cards for voting 
  - Show a list of members and the status of each one

@@ -9,9 +9,11 @@
     </q-card>
     <q-card class="q-pa-md row">
       <div class="col-12">
-        <q-btn class="float-right" label="Join the issue" color="primary" :disabled="!joinable" @click="join"/>
+        <q-btn v-if="joinable" class="float-right" label="Join the issue" color="primary" @click="join"/>
+        <q-btn v-else class="float-right" label="Leave the issue" color="negative" @click="leave"/>
       </div>
-      <q-btn class="q-mt-sm col-3" v-for="button in validVotes" :key="button" outline rounded color="primary" :label="button" />
+      <q-btn class="q-mt-sm col-3" v-for="button in validVotes" :key="button" :label="button" color="primary"
+       @click="vote(button)" outline rounded />
     </q-card>
   </div>
 </template>
@@ -40,6 +42,37 @@ export default {
       }
       this.$api.post(`issue/${this.issueid}/join`, formData).then(res => {
         if (res) {
+          this.$q.notify({
+            type: 'positive',
+            text: 'You have successfully joined the issue'
+          })
+        }
+      })
+    },
+    vote (value) {
+      const formData = {
+        userName: this.userName,
+        value
+      }
+      this.$api.post(`issue/${this.issueid}/vote`, formData).then(res => {
+        if (res) {
+          this.$q.notify({
+            type: 'positive',
+            text: 'You have successfully voted'
+          })
+        }
+      })
+    },
+    leave () {
+      const formData = {
+        name: this.userName
+      }
+      this.$api.post(`issue/${this.issueid}/leave`, formData).then(res => {
+        if (res) {
+          this.$q.notify({
+            type: 'positive',
+            text: 'You have successfully leave the issue'
+          })
         }
       })
     }
