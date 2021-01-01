@@ -10,12 +10,10 @@
             <img :src="`https://cdn.quasar.dev/img/avatar${randomNumber()}.jpg`">
           </q-avatar>
         </q-item-section>
-
         <q-item-section>
           <q-item-label>{{ contact.name }}</q-item-label>
           <q-item-label caption lines="1">{{ contact.value }}</q-item-label>
         </q-item-section>
-
         <q-item-section side>
           <q-icon v-if="contact.status == 'voted'" name="check_circle" color="green"><q-tooltip>Voted</q-tooltip></q-icon>
           <q-icon v-if="contact.status == 'waiting'" name="alarm" color="green"><q-tooltip>Waiting</q-tooltip></q-icon>
@@ -23,17 +21,12 @@
         </q-item-section>
       </q-item>
     </q-list>
-
   </div>
 </template>
 
 <script>
 export default {
   props: ['issues', 'issueid'],
-  data () {
-    return {
-    }
-  },
   computed: {
     issue () {
       return this.issues.find(val => val.id === this.issueid)

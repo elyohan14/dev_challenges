@@ -43,8 +43,7 @@ export default {
   data () {
     return {
       prompt: null,
-      form: {},
-      poker: null
+      form: {}
     }
   },
   validations: {
@@ -58,8 +57,8 @@ export default {
       this.prompt = true
     },
     saveIssue () {
-      this.$v.form.$touch()
-      if (!this.$v.form.$error) {
+      this.$v.form.$touch() // Validate the issue and description fields
+      if (!this.$v.form.$error) { // If no errors in form
         const formData = {
           description: this.form.description,
           name: this.$q.localStorage.getItem('name')

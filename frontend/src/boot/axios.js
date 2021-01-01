@@ -1,3 +1,7 @@
+/**
+ * File with axios instance
+ */
+
 import axios from 'axios'
 import { Notify } from 'quasar'
 
