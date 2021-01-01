@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-toolbar class="bg-primary text-white shadow-2">
-      <q-toolbar-title>Participants {{ issue.status == 'reveal' ? '- Avg ' + issue.avg : '' }}</q-toolbar-title>
+      <q-toolbar-title>Participants {{ issue.status == 'reveal' && issue.avg > 0 ? '- Avg ' + issue.avg : '' }}</q-toolbar-title>
     </q-toolbar>
     <q-list bordered>
       <q-item v-for="contact in issue.members" :key="contact.id" class="q-mb-sm" v-ripple>

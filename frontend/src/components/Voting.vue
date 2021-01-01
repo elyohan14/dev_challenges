@@ -44,7 +44,7 @@ export default {
         if (res) {
           this.$q.notify({
             type: 'positive',
-            text: 'You have successfully joined the issue'
+            message: 'You have successfully joined the issue'
           })
         }
       })
@@ -58,7 +58,7 @@ export default {
         if (res) {
           this.$q.notify({
             type: 'positive',
-            text: 'You have successfully voted'
+            message: 'You have successfully voted'
           })
         }
       })
@@ -71,7 +71,7 @@ export default {
         if (res) {
           this.$q.notify({
             type: 'positive',
-            text: 'You have successfully leave the issue'
+            message: 'You have successfully leave the issue'
           })
         }
       })

@@ -30,7 +30,6 @@ class IssueController {
   async sendIssues () {
     const issues = await this.getIssues()
     const topic = Ws.getChannel('poker').topic('poker')
-    console.log('topic', topic.socket.channel.subscriptions)
 
     // Send issues through websocket
     if(topic){
@@ -153,7 +152,7 @@ class IssueController {
 
   /**
    * Display a single issue.
-   * GET issues/:id
+   * GET issue/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -202,6 +201,30 @@ class IssueController {
       await this.sendIssues()
       response.send(true)
     }
+  }
+
+  /**
+   * Leave a single issue.
+   * Post issue/:issue/leave
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   * @param {View} ctx.view
+   */
+  async leave ({ params, request, response, view }) {
+    const req = request.all()
+    const issues = await this.getIssues()
+    const exists = issues ? issues.findIndex(val => val.id == params.issue) : false
+    if (exists != -1) {
+      const issue = issues[exists]
+      const memberIndex = issue.members.findIndex(val => val.name === req.userName)
+      issue.members.splice(memberIndex, 1)
+      issues[exists] = issue
+      await this.saveIssues(issues)
+      await this.sendIssues()
+    }
+    response.send(true)
   }
 
 }
